@@ -15,6 +15,7 @@ add = (e) =>{
     this.props.addContactHandler(this.state);
     // console.log(this.state);
     this.setState({name: "", email: ""});
+    this.props.history.push("/");
 }
     render() {
         return (
