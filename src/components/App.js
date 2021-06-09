@@ -13,6 +13,8 @@ function App() {
   const LOCAL_STORAGE_KEY = "contacts";
 
   const [contacts, setContacts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const retrieveContacts = async () => {
     const response = await api.get("/contacts");
@@ -48,6 +50,20 @@ function App() {
     setContacts(newContactList);
   };
 
+  const searchHandler = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    if (searchTerm !== "") {
+      const newContactList = contacts.filter((contact) => {
+        return Object.values(contact).join(" ").toLowerCase().includes(searchTerm.toLowerCase());
+        
+      });
+      setSearchResults(newContactList);
+    }
+    else{
+      setSearchResults(contacts);
+    }
+  };
+
   useEffect(() => {
     // const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     // if (retriveContacts) setContacts(retriveContacts);
@@ -68,7 +84,9 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route exact path="/" render={(props) => (<ContactList {...props} contacts={contacts} getContactId={removeContactHandler} />)
+          <Route exact path="/" render={(props) => (<ContactList {...props} contacts={searchTerm.length < 1 ? contacts : searchResults} getContactId={removeContactHandler} 
+          term={searchTerm}
+          searchKeyword={searchHandler} />)
           } />
 
           <Route exact path="/add" render={(props) => (<AddContact {...props} addContactHandler={addContactHandler} />)
