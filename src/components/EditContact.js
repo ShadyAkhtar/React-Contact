@@ -1,18 +1,24 @@
 import React from "react";
 
-class AddContact extends React.Component {
-state = {
-    name :"",
-    email: "",
-};
+class EditContact extends React.Component {
 
-add = (e) =>{
+    constructor(props) {
+        super(props)
+        const {id, name, email} = props.location.state.contact;
+        this.state = {
+            id,
+            name, 
+            email,
+        }
+    }
+
+update = (e) =>{
     e.preventDefault();
     if(this.state.name === "" || this.state.email===""){
         alert("Field cannot be empty");
         return
     }
-    this.props.addContactHandler(this.state);
+    this.props.updateContactHandler(this.state);
     // console.log(this.state);
     this.setState({name: "", email: ""});
     this.props.history.push("/");
@@ -20,8 +26,8 @@ add = (e) =>{
     render() {
         return (
             <div className="ui main">
-                <h2>Add Contact</h2>
-                <form action="" className="ui form" onSubmit={this.add}>
+                <h2>Edit Contact</h2>
+                <form action="" className="ui form" onSubmit={this.update}>
                     <div className="field">
                         <label htmlFor="name">Name  </label>
                         <input type="text" id="name" name="name" placeholder="Name" value={this.state.name} onChange={(e) => this.setState({name: e.target.value})} />
@@ -30,11 +36,11 @@ add = (e) =>{
                         <label htmlFor="email">Email  </label>
                         <input type="email" id="email" name="email" placeholder="Email" value={this.state.email} onChange={(e) => this.setState({email: e.target.value})}/>
                     </div>
-                    <button className="ui blue button">Add</button>
+                    <button className="ui blue button">Update</button>
                 </form>
             </div>
         );
     }
 }
 
-export default AddContact;
+export default EditContact;
